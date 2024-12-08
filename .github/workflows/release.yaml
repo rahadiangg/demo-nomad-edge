@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-24.04
     name: Create release
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
 
       - name: Checkout
@@ -35,7 +35,7 @@ jobs:
     needs:
       - create-release
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: true
       matrix:
@@ -84,7 +84,7 @@ jobs:
     needs:
       - build-release
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
 
       - name: Checkout
