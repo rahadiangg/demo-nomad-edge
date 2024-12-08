@@ -29,6 +29,8 @@ jobs:
   build-release:
     runs-on: ubuntu-24.04
     name: Release
+    needs:
+      - create-release
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
@@ -76,6 +78,8 @@ jobs:
   publish-release:
     runs-on: ubuntu-24.04
     name: Publish release
+    needs:
+      - build-reelase
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
