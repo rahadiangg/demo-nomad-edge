@@ -83,7 +83,7 @@ func main() {
 			wgLocalDb.Add(1)
 			price := random.Intn(maxPrice-minPrice+1) + minPrice
 
-			fmt.Printf("Random Price: %d\n", price)
+			slog.Info(fmt.Sprintf("Random Price: %d\n", price))
 
 			data := localTransaction{
 				Platform: config.Platform,
