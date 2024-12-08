@@ -62,15 +62,12 @@ jobs:
           go-version: 1.22.1
       
       - name: Build binary app
-        env:
-          GOOS: ${{ matrix.os }}
-          GOARCH: ${{ matrix.arch }}
         run: |
           cd backend-app
-          go build -o backend-app_${{ steps.get-tag.outputs.tag }}_$GOOS_$GOARCH .
+          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o backend-app_${{ steps.get-tag.outputs.tag }}_${{ matrix.os }}_${{ matrix.arch }} .
           cd ..
           cd edge-app
-          go build -o edge-app_${{ steps.get-tag.outputs.tag }}_$GOOS_$GOARCH .
+          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o edge-app_${{ steps.get-tag.outputs.tag }}_${{ matrix.os }}_${{ matrix.arch }} .
       
       - name: Upload release
         env:
@@ -78,8 +75,8 @@ jobs:
           GOARCH: ${{ matrix.arch }}
         run: |
           gh release upload ${{ steps.get-tag.outputs.tag }} \
-            backend-app/backend-app_${{ steps.get-tag.outputs.tag }}_$GOOS_$GOARCH \
-            edge-app/edge-app_${{ steps.get-tag.outputs.tag }}_$GOOS_$GOARCH
+            backend-app/backend-app_${{ steps.get-tag.outputs.tag }}_${{ matrix.os }}_${{ matrix.arch }} \
+            edge-app/edge-app_${{ steps.get-tag.outputs.tag }}_${{ matrix.os }}_${{ matrix.arch }}
   
   publish-release:
     runs-on: ubuntu-24.04
