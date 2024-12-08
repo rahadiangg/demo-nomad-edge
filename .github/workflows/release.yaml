@@ -1,0 +1,93 @@
+name: release
+on:
+  push:
+    tags:
+      - 'v[0-9]+\.[0-9]+\.[0-9]+'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-24.04
+    name: Create release
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+
+      - name: Get tag
+        id: get-tag
+        uses: devops-actions/action-get-tag@v1.0.3
+        with:
+          strip_v: false # Optional: Remove 'v' character from version
+          default: v0.0.0 # Optional: Default version when tag not foun
+
+      - name: Create release
+        run: |
+          gh release create ${{ steps.get-tag.outputs.tag }} \
+            --draft \
+            --verify-tag \
+            --title ${{ steps.get-tag.outputs.tag }}
+
+  build-release:
+    runs-on: ubuntu-24.04
+    name: Release
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    strategy:
+      fail-fast: true
+      matrix:
+        arch: ["arm64", "amd64"]
+        os: ["linux", "darwin"]
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Get tag
+        id: get-tag
+        uses: devops-actions/action-get-tag@v1.0.3
+        with:
+          strip_v: false # Optional: Remove 'v' character from version
+          default: v0.0.0 # Optional: Default version when tag not foun
+      
+      - name: Setup golang
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.22.1
+      
+      - name: Build binary app
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+        run: |
+          cd backend-app
+          go build -o backend-app_${{ steps.get-tag.outputs.tag }}_$GOOS_$GOARCH .
+          cd ..
+          cd edge-app
+          go build -o edge-app_${{ steps.get-tag.outputs.tag }}_$GOOS_$GOARCH .
+      
+      - name: Upload release
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+        run: |
+          gh release upload ${{ steps.get-tag.outputs.tag }} \
+            backend-app/backend-app_${{ steps.get-tag.outputs.tag }}_$GOOS_$GOARCH \
+            edge-app/edge-app_${{ steps.get-tag.outputs.tag }}_$GOOS_$GOARCH
+  
+  publish-release:
+    runs-on: ubuntu-24.04
+    name: Publish release
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+
+      - name: Get tag
+        id: get-tag
+        uses: devops-actions/action-get-tag@v1.0.3
+        with:
+          strip_v: false # Optional: Remove 'v' character from version
+          default: v0.0.0 # Optional: Default version when tag not foun
+
+      - name: Publish release
+        run: |
+          gh release edit ${{ steps.get-tag.outputs.tag }} \
+            --draft=false

@@ -1,0 +1,25 @@
+services:
+  postgresql:
+    image: postgres:17.2-alpine3.20
+    container_name: postgresql-demo-nomad-edge
+    ports:
+      - 5555:5432
+    environment:
+      - POSTGRES_PASSWORD=mantapdjiwa
+      - POSTGRES_DB=demo-nomad-edge
+  
+  backend-app:
+    restart: on-failure
+    depends_on:
+      - postgresql
+    build:
+      context: ./backend-app
+    container_name: backend-app
+    ports:
+      - 8989:8080
+    environment:
+      - DB_HOST=postgresql
+      - DB_USER=postgres
+      - DB_PASS=mantapdjiwa
+      - DB_NAME=demo-nomad-edge
+      - DB_PORT=5432

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Dashboard</title>
+</head>
+
+<body>
+    <h1>Current Configuration</h1>
+    <table>
+        <tr>
+            <td>Database path</td>
+            <td>:</td>
+            <td>{{ .configDatabasePath }}</td>
+        </tr>
+        <tr>
+            <td>Interval create random data</td>
+            <td>:</td>
+            <td>{{ .configIntervalRandomData }}</td>
+        </tr>
+        <tr>
+            <td>Interval send data</td>
+            <td>:</td>
+            <td>{{ .configIntervalSendData }}</td>
+        </tr>
+        <tr>
+            <td>Platofmr</td>
+            <td>:</td>
+            <td>{{ .configPlatform }}</td>
+        </tr>
+        <tr>
+            <td>Backend URI</td>
+            <td>:</td>
+            <td>{{ .configBackendUri }}</td>
+        </tr>
+    </table>
+
+    <br>
+    <br>
+    <h1>Data</h1>
+    <table>
+        <tr>
+            <td>Total Data</td>
+            <td>:</td>
+            <td>{{ .totalData }}</td>
+        </tr>
+        <tr>
+            <td>Data Sent</td>
+            <td>:</td>
+            <td>{{ .dataSend }}</td>
+        </tr>
+        <tr>
+            <td>Data Unsent</td>
+            <td>:</td>
+            <td>{{ .dataUnsend }}</td>
+        </tr>
+</body>
+
+</html>
