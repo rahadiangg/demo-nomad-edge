@@ -12,6 +12,9 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
 
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Get tag
         id: get-tag
         uses: devops-actions/action-get-tag@v1.0.3
@@ -83,6 +86,9 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Get tag
         id: get-tag
