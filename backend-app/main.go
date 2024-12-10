@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log/slog"
 	"os"
@@ -15,7 +16,22 @@ import (
 	"gorm.io/gorm"
 )
 
+var (
+	appVersion = "v0.0.1" // default value, overridden by -ldflags
+)
+
 func main() {
+
+	// Define CLI flag
+	showVersion := flag.Bool("version", false, "Print the version and exit")
+	flag.Parse()
+
+	// Check if the `--version` flag is set
+	if *showVersion {
+		fmt.Printf("%s", appVersion)
+		os.Exit(0)
+	}
+
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 	})

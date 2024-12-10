@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"embed"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -25,7 +26,21 @@ import (
 //go:embed *.html
 var viewsfs embed.FS
 
+var (
+	appVersion = "v0.0.1" // default value, overridden by -ldflags
+)
+
 func main() {
+
+	// Define CLI flag
+	showVersion := flag.Bool("version", false, "Print the version and exit")
+	flag.Parse()
+
+	// Check if the `--version` flag is set
+	if *showVersion {
+		fmt.Printf("%s", appVersion)
+		os.Exit(0)
+	}
 
 	// load configudation
 	appIntervalRandomData, _ := strconv.Atoi(getEnv("APP_INTERVAL_RANDOM_DATA", "5"))

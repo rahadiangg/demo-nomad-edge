@@ -64,10 +64,10 @@ jobs:
       - name: Build binary app
         run: |
           cd backend-app
-          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o backend-app_${{ steps.get-tag.outputs.tag }}_${{ matrix.os }}_${{ matrix.arch }} .
+          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -ldflags "-X main.appVersion=${{ steps.get-tag.outputs.tag }}" -o backend-app_${{ steps.get-tag.outputs.tag }}_${{ matrix.os }}_${{ matrix.arch }} .
           cd ..
           cd edge-app
-          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o edge-app_${{ steps.get-tag.outputs.tag }}_${{ matrix.os }}_${{ matrix.arch }} .
+          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -ldflags "-X main.appVersion=${{ steps.get-tag.outputs.tag }}" -o edge-app_${{ steps.get-tag.outputs.tag }}_${{ matrix.os }}_${{ matrix.arch }} .
       
       - name: Upload release
         env:

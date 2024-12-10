@@ -40,6 +40,7 @@ func (h *CustomHandler) LocalDashboard(c *fiber.Ctx) error {
 	}
 
 	return c.Render("localDashboard", fiber.Map{
+		"appVersion":               appVersion,
 		"configDatabasePath":       h.config.DatabasePath,
 		"configIntervalRandomData": h.config.IntervalRandomData,
 		"configIntervalSendData":   h.config.IntervalSendData,
